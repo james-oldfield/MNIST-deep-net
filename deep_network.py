@@ -90,6 +90,7 @@ class DeepNet(object):
         :param dA: gradient of cost function w/r/t current layer.
         :param cache: the cache of the layer's values.
         :param activ_fn: the activation function used in this layer.
+        :return: The derivative of cost fn, w/r/t desired vals.
         """
 
         A_prev, W, b, Z, d_func = cache
@@ -104,6 +105,12 @@ class DeepNet(object):
         return dA_prev, dW, db
 
     def get_cost(self, YHat, Y):
+        """Compute the Cross Entropy cost, given our prediction and ground truth y.
+
+        :param YHat: our approximation of Y.
+        :param Y: the actual value of Y.
+        :return: the cost, as specified by the cross entropy function.
+        """
         m = Y.shape[1]  # no. of examples
 
         # Compute the Cross Entropy cost, given the predicted values
