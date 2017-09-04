@@ -73,6 +73,6 @@ class DeepNet(object):
         bL = self.parameters['b{}'.format(self.L)]
         AL, cache = self.activate(A, WL, bL, activ_fn=sigmoid)
 
-        caches.apend(cache)
+        caches.append(cache)
 
         return AL, caches
