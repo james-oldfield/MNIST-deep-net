@@ -76,3 +76,13 @@ class DeepNet(object):
         caches.append(cache)
 
         return AL, caches
+
+    def get_cost(self, YHat, Y):
+        m = Y.shape[1]  # no. of examples
+
+        # Compute the Cross Entropy cost, given the predicted values
+        # and the ground truth values
+        cost = -(1/m) * np.sum(np.nan_to_num(
+            Y * np.log(YHat) + (1-Y) * np.log(1-YHat)))
+
+        return np.squeeze(cost)
