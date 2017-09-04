@@ -19,14 +19,14 @@ def relu(z):
 def d_relu(x):
     """Compute derivative of ReLu w/r/t x.
 
-    :param x: scalar value we wish to evaluate the gradient at.
+    :param x: vector value we wish to evaluate the gradient at.
     :return: d_relu/d x
     """
 
-    if x > 0:
-        return 1
-    else:
-        return 0
+    x[x <= 0] = 0
+    x[x > 0] = 1
+
+    return x
 
 
 def sigmoid(z):
