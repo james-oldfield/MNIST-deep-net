@@ -83,6 +83,37 @@ class DeepNet(object):
 
         return AL, caches
 
+    def backpropagate(self, AL, Y, caches):
+        """Backpropagate the error to all the weights, etc.
+        """
+
+        grads = {}
+        L = self.L
+        Y = Y.reshape(AL.shape)
+
+        # Store the deriv. wrt the output layer
+        dAL = - (np.divide(Y, AL) - np.divide(1 - Y, 1 - AL))
+
+        current_cache = caches[-1]
+
+        # store the gradients of the output layer.
+        grads['dA{}'.format(L)],
+        grads["dW{}".format(L)],
+        grads["db{}".format(L)] = self.get_prevlayer_gradient(
+            dAL, current_cache, activ_fn=sigmoid)
+
+        for l in reversed(range(L-1)):
+            current_cache = caches[l]
+
+            dA_prev_temp, dW_temp, db_temp = self.get_prevlayer_gradient(
+                grads["dA{}".format(L)], current_cache)
+
+            grads["dA{}".format(l+1)] = dA_prev_temp
+            grads["dW{}".format(l+1)] = dW_temp
+            grads["db{}".format(l+1)] = db_temp
+
+        return grads
+
     def get_prevlayer_gradient(self, dA, cache, activ_fn=relu):
         """Compute the gradient of layer (l-1) w/r/t cost, given
         the derivative of the cost function w/r/t layer `l`.
