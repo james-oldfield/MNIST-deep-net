@@ -47,7 +47,13 @@ class DeepNet(object):
         Z = np.dot(W, A_prev) + b
         A = activ_fn(Z)
 
-        return A, ((A_prev, W, b), Z)
+        # store the reference to derivative of correct function
+        if activ_fn is relu:
+            d_func = d_relu
+        else:
+            d_func = d_sigmoid
+
+        return A, (A_prev, W, b, Z, d_func)
 
     def feedforward(self, A):
         """Forward propagate using ReLu activation functions up to
