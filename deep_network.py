@@ -120,6 +120,24 @@ class DeepNet(object):
 
         return grads
 
+    def update_params(self, grads, eta):
+        """Update the object's params using learning rate eta
+        (assumes we've already) performed desired step of backprop,
+        with an appropriately size minibatch.
+
+        :param grads: the dictionary of gradients to use to update.
+        :param eta: learning rate for GD.
+        """
+
+        L = self.L  # cache no. of layers
+        for l in range(L):
+            self.parameters['W{}'.format(l+1)] = \
+                self.parameters['W{}'.format(l+1)] \
+                - eta * grads['dW{}'.format(l+1)]
+            self.parameters['b{}'.format(l+1)] = \
+                self.parameters['b{}'.format(l+1)] \
+                - eta * grads['db{}'.format(l+1)]
+
     def get_prevlayer_gradient(self, dA, cache, activ_fn=relu):
         """Compute the gradient of layer (l-1) w/r/t cost, given
         the derivative of the cost function w/r/t layer `l`.
