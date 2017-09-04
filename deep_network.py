@@ -85,6 +85,12 @@ class DeepNet(object):
 
     def backpropagate(self, AL, Y, caches):
         """Backpropagate the error to all the weights, etc.
+
+        :param AL: The activation value of layer `L` (output).
+        :param Y: Ground truth Y values.
+        :param caches: All the cache values computed in forward prop.
+        :return: a dictionary of the gradients of all the parameters
+            for the net.
         """
 
         grads = {}
