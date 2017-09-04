@@ -83,7 +83,7 @@ class DeepNet(object):
 
         return AL, caches
 
-    def get_prevlayer_gradient(dA, cache, activ_fn=relu):
+    def get_prevlayer_gradient(self, dA, cache, activ_fn=relu):
         """Compute the gradient of layer (l-1) w/r/t cost, given
         the derivative of the cost function w/r/t layer `l`.
 
