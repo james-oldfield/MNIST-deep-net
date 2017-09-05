@@ -1,5 +1,7 @@
 import numpy as np
+
 from activations import relu, d_relu, sigmoid, d_sigmoid
+from sklearn.utils import shuffle
 
 
 class DeepNet(object):
@@ -117,6 +119,41 @@ class DeepNet(object):
             grads["db{}".format(l+1)] = db_temp
 
         return grads
+
+    def SGD(self, training_data, num_epochs, mini_batch_size,
+            eta, debug=False):
+
+        X, y = training_data
+        m = len(X)
+
+        for epoch in range(num_epochs):
+            # shuffle the data set
+            X, y = shuffle(X, y, random_state=0)
+
+            mini_batches = [
+                [X[k:k+mini_batch_size],
+                 y[k:k+mini_batch_size]]
+                for k in range(0, m, mini_batch_size)]
+
+            for batch_num, mini_batch in enumerate(mini_batches):
+                X_mini, y_mini = mini_batch
+                y_mini = np.asarray(y_mini)
+
+                # first, compute the activation in layer L for this mini_batch
+                AL, caches = self.feedforward(X_mini.T)
+                # then the cost for this mini batch
+                cost = self.get_cost(AL, y_mini)
+                # then get the gradients w/r/t cost function
+                grads = self.backpropagate(AL, y_mini, caches)
+
+                # finally, update the object's params.
+                self.update_params(grads, eta)
+
+                if batch_num % 100 == 0:
+                    print('Cost after iteration {}: {}'.format(batch_num,
+                                                               cost))
+
+        return None
 
     def update_params(self, grads, eta):
         """Update the object's params using learning rate eta
