@@ -121,7 +121,7 @@ class DeepNet(object):
         return grads
 
     def SGD(self, training_data, num_epochs, mini_batch_size,
-            eta, debug=False):
+            eta, test_data=None, debug=False):
 
         X, y = training_data
         m = len(X)
@@ -149,11 +149,11 @@ class DeepNet(object):
                 # finally, update the object's params.
                 self.update_params(grads, eta)
 
-                if batch_num % 100 == 0:
+                if batch_num % 1000 == 0:
                     print('Cost after iteration {}: {}'.format(batch_num,
                                                                cost))
-
-        return None
+            if test_data:
+                self.predict(test_data)
 
     def update_params(self, grads, eta):
         """Update the object's params using learning rate eta
@@ -209,3 +209,21 @@ class DeepNet(object):
             Y * np.log(YHat) + (1-Y) * np.log(1-YHat)))
 
         return np.squeeze(cost)
+
+    def predict(self, data):
+        X, y = data
+        X = np.array(X).T
+        y = np.array(y).T
+
+        m = X.shape[1]
+        p = np.zeros((1, m))
+
+        probs, _ = self.feedforward(X)
+
+        for i in range(0, probs.shape[1]):
+            if probs[0, i] > 0.5:
+                p[0, i] = 1
+            else:
+                p[0, i] = 0
+
+        print("Accuracy: " + str(np.sum((p == y) / m)))
