@@ -13,3 +13,10 @@ W.I.P / to come:
 - [ ] Xavier weight initialisation
 
 etc.
+
+## install
+
+`pip install -r requirements.txt`
+
+- using python version `3.6.1`
+- using flake8 for python linting
