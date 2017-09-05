@@ -63,10 +63,11 @@ class DeepNet(object):
         """
 
         caches = []
+        L = len(self.parameters) // 2
 
         # Compute each layer's activations using ReLu, up until L-1.
         # Store the relevant values in `cache` list for use with bprop.
-        for l in range(1, self.L):
+        for l in range(1, L):
             A_prev = A
             W = self.parameters['W{}'.format(l)]
             b = self.parameters['b{}'.format(l)]
@@ -75,8 +76,8 @@ class DeepNet(object):
             caches.append(cache)
 
         # Compute the output layer's value using sigmoid.
-        WL = self.parameters['W{}'.format(self.L)]
-        bL = self.parameters['b{}'.format(self.L)]
+        WL = self.parameters['W{}'.format(L)]
+        bL = self.parameters['b{}'.format(L)]
         AL, cache = self.activate(A, WL, bL, activ_fn=sigmoid)
 
         caches.append(cache)
@@ -94,7 +95,7 @@ class DeepNet(object):
         """
 
         grads = {}
-        L = self.L
+        L = len(caches)
         Y = Y.reshape(AL.shape)
 
         # Store the deriv. wrt the output layer
@@ -129,7 +130,7 @@ class DeepNet(object):
         :param eta: learning rate for GD.
         """
 
-        L = self.L  # cache no. of layers
+        L = len(self.parameters) // 2  # cache no. of layers
         for l in range(L):
             self.parameters['W{}'.format(l+1)] = \
                 self.parameters['W{}'.format(l+1)] \
@@ -166,7 +167,7 @@ class DeepNet(object):
         :param Y: the actual value of Y.
         :return: the cost, as specified by the cross entropy function.
         """
-        m = Y.shape[1]  # no. of examples
+        m = len(Y)  # no. of examples
 
         # Compute the Cross Entropy cost, given the predicted values
         # and the ground truth values
