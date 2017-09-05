@@ -1,1 +1,3 @@
 numpy
+SciPy
+scikit-learn
