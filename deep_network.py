@@ -120,13 +120,21 @@ class DeepNet(object):
 
         return grads
 
-    def SGD(self, training_data, num_epochs, mini_batch_size,
-            eta, test_data=None, debug=False):
+    def SGD(self,
+            training_data,
+            num_epochs=30,
+            mini_batch_size=10,
+            eta=0.5,
+            test_data=None,
+            save_costs=False):
 
         X, y = training_data
         m = len(X)
+        costs = []
 
         for epoch in range(num_epochs):
+            print('Training epoch #{}\n\n'.format(epoch + 1))
+
             # shuffle the data set
             X, y = shuffle(X, y, random_state=0)
 
@@ -149,11 +157,19 @@ class DeepNet(object):
                 # finally, update the object's params.
                 self.update_params(grads, eta)
 
-                if batch_num % 1000 == 0:
-                    print('Cost after iteration {}: {}'.format(batch_num,
-                                                               cost))
+                if batch_num % 100 == 0:
+                    # store the costs to inspect performance
+                    costs.append(cost)
+
+                    print('Cost after iteration {}: {} in epoch #{}'.format(
+                        batch_num, cost, epoch+1))
             if test_data:
                 self.predict(test_data)
+
+        if save_costs:
+            import matplotlib.pyplot as pp
+            pp.plot(costs, 'x')
+            pp.show()
 
     def update_params(self, grads, eta):
         """Update the object's params using learning rate eta
