@@ -104,10 +104,7 @@ class DeepNet(object):
         current_cache = caches[-1]
 
         # store the gradients of the output layer.
-        grads['dA{}'.format(L)],
-        grads["dW{}".format(L)],
-        grads["db{}".format(L)] = self.get_prevlayer_gradient(
-            dAL, current_cache, activ_fn=sigmoid)
+        grads['dA{}'.format(L)], grads["dW{}".format(L)], grads["db{}".format(L)] = self.get_prevlayer_gradient(dAL, current_cache, activ_fn=sigmoid)  # noqa: E501
 
         for l in reversed(range(L-1)):
             current_cache = caches[l]
