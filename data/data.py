@@ -17,10 +17,17 @@ def get_MNIST():
 
 def load_data_wrapper():
     tr_d, va_d, te_d = get_MNIST()
+
     training_results = [one_hot(y) for y in tr_d[1]]
     training_data = (tr_d[0], training_results)
 
-    return (training_data, va_d, te_d)
+    validation_results = [one_hot(y) for y in va_d[1]]
+    validation_data = (va_d[0], validation_results)
+
+    test_results = [one_hot(y) for y in te_d[1]]
+    test_data = (te_d[0], test_results)
+
+    return (training_data, validation_data, test_data)
 
 
 def one_hot(j):
