@@ -137,7 +137,7 @@ class DeepNet(object):
 
             for batch_num, mini_batch in enumerate(mini_batches):
                 X_mini, y_mini = mini_batch
-                y_mini = np.asarray(y_mini)
+                y_mini = np.asarray(y_mini).T
 
                 # first, compute the activation in layer L for this mini_batch
                 AL, caches = self.feedforward(X_mini.T)
@@ -212,18 +212,14 @@ class DeepNet(object):
 
     def predict(self, data):
         X, y = data
-        X = np.array(X).T
-        y = np.array(y).T
+        X = X.T
+        y = np.asarray(y).T
 
         m = X.shape[1]
-        p = np.zeros((1, m))
 
         probs, _ = self.feedforward(X)
 
-        for i in range(0, probs.shape[1]):
-            if probs[0, i] > 0.5:
-                p[0, i] = 1
-            else:
-                p[0, i] = 0
-
-        print("Accuracy: " + str(np.sum((p == y) / m)))
+        print('-----------')
+        print('Accuracy against test set: ' + str(np.sum((
+            np.argmax(probs.T, axis=1) == np.argmax(y, axis=1)) / m)))
+        print('-----------')
